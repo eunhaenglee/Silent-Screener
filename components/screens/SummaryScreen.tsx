@@ -1,62 +1,39 @@
-// components/screens/SummaryScreen.tsx
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
+import { getSessionHistory } from '@/utils/api';
 
-type Props = {
-  summaryFeedback: {
-    score: number;
-    flow: string;
-    examples: boolean;
-    improvement: string;
-    suggestion: string;
-  } | null;
-  handleSummarySubmit: () => Promise<void>;
-  onBack: () => void;
-};
+export default function HistoryScreen() {
+  const [history, setHistory] = useState<any[]>([]);
 
-export default function SummaryScreen({
-  summaryFeedback,
-  handleSummarySubmit,
-  onBack,
-}: Props) {
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getSessionHistory();
+      setHistory(result);
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className="space-y-6 w-full max-w-md">
-      <h2 className="text-2xl font-semibold text-center">Summary Feedback</h2>
-
-      { !summaryFeedback ? (
-        <button
-          onClick={handleSummarySubmit}
-          className="w-full bg-white text-black rounded-md py-2 font-semibold"
-        >
-          Generate Summary Feedback
-        </button>
+    <div className="p-4 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Session History</h1>
+      {history.length === 0 ? (
+        <p className="text-gray-400">No session history found.</p>
       ) : (
-        <>
-          <h2 className="text-2xl font-semibold">Score: {summaryFeedback.score} / 100</h2>
-          <div className="bg-[#2a2a2a] p-4 rounded-md">
-            <p className="font-semibold">Logical Flow</p>
-            <p className="text-sm text-gray-300">{summaryFeedback.flow}</p>
-          </div>
-          <div className="bg-[#2a2a2a] p-4 rounded-md">
-            <p className="font-semibold">Use of Examples</p>
-            <p className="text-sm text-gray-300">
-              {summaryFeedback.examples ? '✔️ Used' : '❌ Not used'}
-            </p>
-          </div>
-          <div className="bg-[#2a2a2a] p-4 rounded-md">
-            <p className="font-semibold">Areas for Improvement</p>
-            <p className="text-sm text-gray-300">{summaryFeedback.improvement}</p>
-          </div>
-          <div className="bg-[#2a2a2a] p-4 rounded-md">
-            <p className="font-semibold">Suggested Response</p>
-            <p className="text-sm text-gray-300">{summaryFeedback.suggestion}</p>
-          </div>
-          <button
-            onClick={onBack}
-            className="w-full bg-gray-500 text-white rounded-md py-2 font-semibold mt-4"
-          >
-            Back to Start
-          </button>
-        </>
+        <div className="space-y-4">
+          {history.map((session, index) => (
+            <div key={index} className="bg-[#2a2a2a] p-4 rounded-md">
+              <p className="text-sm text-gray-400">
+                Date: {new Date(session.timestamp).toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-400">
+                Role: {session.role}
+              </p>
+              <p className="text-sm text-gray-400">
+                Score: {session.feedback?.score ?? 'N/A'}
+              </p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
