@@ -1,0 +1,64 @@
+/* styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 기존 CSS 변수, 다크모드, 폰트 설정 유지 */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-bg-main: #f4f1ff;
+  --color-primary: #6c5dd3;
+  --color-primary-dark: #3d356b;
+  --color-accent: #b9aaff;
+  --color-btn: #cfc6ff;
+  --color-btn-hover: #b9aaff;
+  --color-text-main: #3d356b;
+  --color-text-sub: #6c5dd3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: 'Geist', 'Pretendard', sans-serif;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+button {
+  background: var(--color-btn);
+  color: var(--color-text-main);
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--color-btn-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-main);
+  font-weight: 700;
+}
+
+/* 기존 Tailwind 유틸리티와 충돌 방지, 필요시 커스텀 클래스 추가 */
+.bg-main {
+  background: var(--color-bg-main);
+}
+.text-primary {
+  color: var(--color-primary);
+}
+.text-main {
+  color: var(--color-text-main);
+}
